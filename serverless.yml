@@ -1,0 +1,60 @@
+service: serverless-contacts-rest-api
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-southeast-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        
+      Resource: arn:aws:dynamodb:ap-southeast-1:*:*
+
+resources:
+  Resources:
+    contactsTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: 'contacts'
+
+functions:
+  create:
+    handler: src/handler/createcontact.createcontact
+    events:
+      - http:
+          path: contacts
+          method: post
+          cors: true
+  list:
+    handler: src/handler/listcontact.listcontact
+    events:
+      - http:
+          path: contacts
+          method: get
+          cors: true
+  get:
+    handler: src/handler/getcontact.getcontact
+    events:
+      - http:
+          path: contacts/{id}
+          method: get
+          cors: true
+  
