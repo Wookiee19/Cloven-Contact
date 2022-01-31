@@ -1,6 +1,10 @@
 {
   "dependencies": {
-    "aws-sdk": "^2.1065.0",
+    "aws-sdk": "^2.1066.0",
+    "express": "^4.17.2",
+    "nodemailer": "^6.7.2",
+    "serverless-http": "^2.7.0",
+    "swagger-editor": "^4.0.6",
     "uuid": "^8.3.2"
   }
 }
