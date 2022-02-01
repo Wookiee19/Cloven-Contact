@@ -6,5 +6,8 @@
     "serverless-http": "^2.7.0",
     "swagger-editor": "^4.0.6",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "serverless-offline": "^8.4.0"
   }
 }

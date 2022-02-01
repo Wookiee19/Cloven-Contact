@@ -1,6 +1,7 @@
 service: serverless-contacts-rest-api
 frameworkVersion: '2'
 
+
 provider:
   name: aws
   runtime: nodejs12.x
