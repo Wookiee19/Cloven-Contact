@@ -97,7 +97,7 @@ Resources:
         ZipFile: |
           var aws = require('aws-sdk');
           console.log('Loading DynamoDB Lambda function');
-          var dynamo = new AWS.DynamoDB.DocumentClient();
+          var dynamo = new aws.DynamoDB.DocumentClient();
           var response = require('cfn-response')
           exports.handler = function(event, context) {
               console.log("REQUEST RECEIVED:\n" + JSON.stringify(event))
@@ -107,17 +107,18 @@ Resources:
                   return
               }
               var responseStatus = "FAILED"
-              var responseData = {}
-              var functionName = event.ResourceProperties.FunctionName
+              var responseData = {};
+              var functionName = 'lambda-function';
               var lambda = new aws.Lambda()
               lambda.invoke({ FunctionName: functionName }, function(err, invokeResult) {
                   if (err) {
                       responseData = {Error: "Invoke call failed"}
                       console.log(responseData.Error + ":\n", err)
                   }
-                  else responseStatus = "SUCCESS"
-                  response.send(event, context, responseStatus, responseData)
+                  else responseStatus = "SUCCESS";
+                  response.send(event, context, responseStatus, responseData);
               })
+            return response;
           }
       Role: !GetAtt
         - LambdaExecutionRole
