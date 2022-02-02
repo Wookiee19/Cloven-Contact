@@ -27,7 +27,7 @@ public class ClovenContactStack extends Stack {
 
 	public ClovenContactStack(final Construct scope, final String id, final StackProps props) {
 		super(scope, id, props);
-		String tableName = "cloven-contact";
+		String tableName = "cloven-contact";     //get value from config
 
 		// Create a DynamoDB Table
 		TableProps tableProps = TableProps.builder().readCapacity(1).writeCapacity(1)
@@ -43,7 +43,7 @@ public class ClovenContactStack extends Stack {
 		// Lambda setup
 		Function simpleLambdaFunction = Function.Builder.create(this, "clovenContactLambda")
 				.runtime(Runtime.NODEJS_12_X).functionName("clovenContactLambda").timeout(Duration.seconds(180))
-				.memorySize(512).environment(env).code(Code.fromAsset("/api/")).handler("").build();
+				.memorySize(512).environment(env).code(Code.fromAsset("./api/hello")).handler("index.handler").build();
 
 		// API Gateway Configuration (Allowing Lambdas to be called via the API Gateway
 		RestApi api = RestApi.Builder.create(this, "Node JS").restApiName("/contact")

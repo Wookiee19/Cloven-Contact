@@ -14,15 +14,15 @@ async function run() {
   const params = {
     TableName: table,
     Item: {
-      Email: "usessr1@g.c",
-      name:"abcs",
-      id: uuid(),
-      data: {
+        id: uuid(),
+        Email: "usessr1123@g.c",
+        name:"abcs12",
+        message:"hello",
         createdAt: Date.now(),
-        updatedAt: Date.now(),
+        updatedAt: Date.now()
         
-        message:"hello"
-      }
+       
+      
     }
   };
   const result = await docClient.put(params).promise();
