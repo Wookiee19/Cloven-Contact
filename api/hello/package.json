@@ -7,7 +7,10 @@
     "author": "Microsoft",
     "scripts": {
         "start": "node index.js",
-        
-    "build": "node build"
+        "build": "NODE_ENV=production grunt build"
+    },
+    "dependencies": {
+        "aws-sdk": "^2.1066.0",
+        "uuidv4": "^6.2.12"
     }
 }

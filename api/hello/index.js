@@ -1,11 +1,33 @@
-const http = require('http');
+const AWS = require("aws-sdk");
+const uuid = require("uuid/v4");
 
-const server = http.createServer((request, response) => {
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    response.end("Hello World!");
+AWS.config.update({
+  region: "ap-south-1",
+  accessKeyId: "AKIA6AP3LOSFSPF4EMAZ",
+  secretAccessKey: "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"
 });
 
-const port = process.env.PORT || 1337;
-server.listen(port);
+const table = "cloven-contact";
+const docClient = new AWS.DynamoDB.DocumentClient();
 
-console.log("Server running at http://localhost:%d", port);
+async function run() {
+  const params = {
+    TableName: table,
+    Item: {
+      Email: "usessr1@g.c",
+      name:"abcs",
+      id: uuid(),
+      data: {
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        
+        message:"hello"
+      }
+    }
+  };
+  const result = await docClient.put(params).promise();
+  console.log(result);
+
+}
+
+run();
