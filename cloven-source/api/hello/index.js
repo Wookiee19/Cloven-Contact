@@ -18,8 +18,8 @@ async function run(event) {
         Email: "usessr1123@g.c",
         name:"abcs12",
         message:"hello",
-        createdAt: new Date().toDateString,
-        updatedAt:  new Date().toDateString
+        createdAt: new Date(),
+        updatedAt:  new Date()
     }
   };
   const result = await docClient.put(params).promise();

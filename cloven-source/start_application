@@ -1,0 +1,8 @@
+#!/bin/bash
+cd api
+cd hello
+npm install
+popd
+"C:\Program Files\7-Zip\7z.exe" a  -r hello.zip -w hello -mem=AES256
+cd ..
+cdk deploy
