@@ -15,9 +15,9 @@ async function run(event) {
     TableName: table,
     Item: {
         id: uuid(),
-        Email: "usessr1123@g.c",
-        name:"abcs12",
-        message:"hello",
+        Email: requestJSON.email,
+        name:requestJSON.name,
+        message:requestJSON.message,
         createdAt: new Date(),
         updatedAt:  new Date()
     }
@@ -28,6 +28,7 @@ async function run(event) {
 
 exports.handler =  async function(event, context) {
   console.log("EVENT: \n" + JSON.stringify(event, null, 2))
+ 
   await run(event);
   return context.logStreamName
 }
