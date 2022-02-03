@@ -12,6 +12,7 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 
 async function run(event) {
   let requestJSON = JSON.parse(event.body);
+  let createdDate = new Date(new Date()-3600*1000*3).toISOString();
   const params = {
     TableName: table,
     Item: {
@@ -19,8 +20,7 @@ async function run(event) {
         Email: requestJSON.email,
         name:requestJSON.name,
         message:requestJSON.message,
-        createdAt: new Date()
-        
+        createdAt: createdDate
     }
   };
   const result = await docClient.put(params).promise();
