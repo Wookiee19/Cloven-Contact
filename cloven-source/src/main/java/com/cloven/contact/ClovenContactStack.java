@@ -27,6 +27,7 @@ public class ClovenContactStack extends Stack {
 		this(scope, id, null);
 	}
 
+	 @SuppressWarnings("serial")
 	public ClovenContactStack(final Construct scope, final String id, final StackProps props) {
 		super(scope, id, props);
 		String tableName = "cloven-contact"; // get value from config
@@ -50,15 +51,15 @@ public class ClovenContactStack extends Stack {
 				.handler("hello/index.handler").build();
 
 		// API Gateway Configuration (Allowing Lambdas to be called via the API Gateway
-		RestApi api = RestApi.Builder.create(this, "Node JS").restApiName("/contact")
-				.description("Cloven Contact API Gateway").build();
+		RestApi api = RestApi.Builder.create(this, "Node JS")
+                .restApiName("contact").description("Cloven Contact API Gateway")
+                .build();
 
-		LambdaIntegration simpleGatewayIntegration = LambdaIntegration.Builder.create(simpleLambdaFunction)
-				.requestTemplates(new HashMap<String, String>() {
-					{
-						put("application/json", "{ \"statusCode\": \"200\" }");
-					}
-				}).build();
+        LambdaIntegration simpleGatewayIntegration = LambdaIntegration.Builder.create(simpleLambdaFunction) 
+                .requestTemplates(new HashMap<String, String>() {{
+                    put("application/json", "{ \"statusCode\": \"200\" }");
+                }}).build();
+
 
 		Resource helloResource = api.getRoot().addResource("simple");
 		Method simpleMethod = helloResource.addMethod("POST", simpleGatewayIntegration);
