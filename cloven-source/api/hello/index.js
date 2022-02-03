@@ -27,12 +27,18 @@ async function run(event) {
   console.log(result);
 }
 
+const headers = {
+  "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+  "Access-Control-Allow-Credentials": true // Required for cookies, authorization headers with HTTPS
+}
+
 exports.handler =  async function(event, context) {
   console.log("EVENT: \n" + JSON.stringify(event, null, 2))
  
   await run(event);
 
   const response = {
+    headers,
     "statusCode": 200,
     "body": JSON.stringify(event),
     "isBase64Encoded": false
