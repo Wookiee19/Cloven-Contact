@@ -1,6 +1,7 @@
 package com.cloven.contact;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.amazonaws.regions.Regions;
 
@@ -10,6 +11,7 @@ import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.RemovalPolicy;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.services.apigateway.CorsOptions;
 import software.amazon.awscdk.services.apigateway.LambdaIntegration;
 import software.amazon.awscdk.services.apigateway.Method;
 import software.amazon.awscdk.services.apigateway.Resource;
@@ -27,7 +29,7 @@ public class ClovenContactStack extends Stack {
 		this(scope, id, null);
 	}
 
-	 @SuppressWarnings("serial")
+	@SuppressWarnings("serial")
 	public ClovenContactStack(final Construct scope, final String id, final StackProps props) {
 		super(scope, id, props);
 		String tableName = "cloven-contact"; // get value from config
@@ -52,20 +54,25 @@ public class ClovenContactStack extends Stack {
 
 		// API Gateway Configuration (Allowing Lambdas to be called via the API Gateway
 		RestApi api = RestApi.Builder.create(this, "Node JS")
-                .restApiName("contact").description("Cloven Contact API Gateway")
-                .build();
+				.defaultCorsPreflightOptions(
+						CorsOptions.builder().allowOrigins(List.of("https://www.cloven.works"))
+						.allowMethods(List.of("POST","PUT")).build())
+				.restApiName("contact").description("Cloven Contact API Gateway").build();
 
-        LambdaIntegration simpleGatewayIntegration = LambdaIntegration.Builder.create(simpleLambdaFunction) 
-                .requestTemplates(new HashMap<String, String>() {{
-                    put("application/json", "{ \"statusCode\": \"200\" }");
-                }}).build();
-
+		LambdaIntegration simpleGatewayIntegration = LambdaIntegration.Builder.create(simpleLambdaFunction)
+				.requestTemplates(new HashMap<String, String>() {
+					{
+						put("application/json", "{ \"statusCode\": \"200\" }");
+					}
+				}).build();
 
 		Resource helloResource = api.getRoot().addResource("simple");
-		Method simpleMethod = helloResource.addMethod("POST", simpleGatewayIntegration);
+		Method simplePostMethod = helloResource.addMethod("POST", simpleGatewayIntegration);
+		Method simpleMethod = helloResource.addMethod("PUT", simpleGatewayIntegration);
 		String urlPrefix = api.getUrl().substring(0, api.getUrl().length() - 1);
 
 		CfnOutput.Builder.create(this, "ZD Simple Lambda").description("")
-				.value("Simple Lambda:" + urlPrefix + simpleMethod.getResource().getPath()).build();
+		.value("Simple Lambda:" + urlPrefix + simplePostMethod.getResource().getPath()).build();
+		
 	}
 }
